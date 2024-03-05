@@ -1,23 +1,32 @@
 #include <pnet/net.h>
 #include <stdio.h>
 
-#ifdef _WIN32
 #include <windows.h>
-#define sleep Sleep
-#else
-#include <unistd.h>
-#endif
 
-int main(void) {
-  pnet_init();
+int main(int argc, char **argv) {
+  if (!pnet_init(PNET_UDP)) {
+    fprintf(stderr, "Failed to initialize!\n");
+    return 1;
+  }
+
   pclient_t *client = pclient_create();
-  pclient_connect(client, "127.0.0.1", 641);
+  perror_e err;
+  if ((err = pclient_connect(client, "127.0.0.1", 641)) != PNET_SUCCESS) {
+    fprintf(stderr, "Failed to connect! Error: %d\n", err);
+    return 1;
+  }
 
   pmsg_t *msg = pmsg_create("ping");
   while (1) {
-    pclient_send(client, msg);
-    sleep(1000);
+    printf("Sending: `%s`\n", msg->buffer);
+    if ((err = pclient_send(client, msg)) != PNET_SUCCESS) {
+      fprintf(stderr, "Failed to send! Error: %d\n", (int)err);
+      goto cleanup;
+    }
+    Sleep(1000);
   }
+
+cleanup:
   pmsg_free(msg);
 
   pnet_close();
