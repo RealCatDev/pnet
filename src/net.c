@@ -304,7 +304,7 @@ void pserver_free(pserver_t *this) {
   #ifdef _WIN32
     for (size_t i = 0; i < this->clientsSize; ++i) pclient_free(this->clients[i]);
     free(this->clients);
-    if (this->sock != INVALID_SOCKET) closesocket(this->sock);
+    if (this->sock != INVALID_SOCKET) { shutdown(this->sock, SD_SEND); closesocket(this->sock); }
     free(this);
   #else
   #endif
