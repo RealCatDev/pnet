@@ -23,3 +23,5 @@ target_link_libraries(pnet ws2_32)
 else()
 
 endif()
+
+add_subdirectory(test)
