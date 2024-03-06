@@ -230,7 +230,7 @@ unsigned __stdcall ListenSession(void *data) {
   #ifdef _WIN32
     SOCKET sock = INVALID_SOCKET;
     struct sockaddr_in addr;
-    int addrLen;
+    int addrLen = sizeof(addr);
     while ((sock = accept(this->sock, (struct sockaddr*) &addr, &addrLen)) != INVALID_SOCKET) {
       if (sock == INVALID_SOCKET) continue;
       unsigned threadID;
@@ -256,9 +256,7 @@ unsigned __stdcall ListenSession(void *data) {
 
 perror_e pserver_listen(pserver_t *this) {
   #ifdef _WIN32
-    if (listen(this->sock, SOMAXCONN) != 0) {
-      return (perror_e) WSAGetLastError();
-    }
+    if (listen(this->sock, SOMAXCONN) != 0) return WSAGetLastError();
 
     unsigned threadID;
     this->listenThread = (HANDLE)_beginthreadex(NULL, 0, &ListenSession, (void*)this, 0, &threadID);
