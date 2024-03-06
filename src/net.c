@@ -229,12 +229,20 @@ unsigned __stdcall ListenSession(void *data) {
   pserver_t *this = (pserver_t*)data;
   #ifdef _WIN32
     SOCKET sock = INVALID_SOCKET;
-    while ((sock = accept(this->sock, NULL, NULL)) != INVALID_SOCKET) {
+    struct sockaddr addr;
+    int addrLen;
+    while ((sock = accept(this->sock, &addr, &addrLen)) != INVALID_SOCKET) {
       if (sock == INVALID_SOCKET) continue;
       unsigned threadID;
 
       pclient_t *client = pclient_create();
       client->sock = sock;
+
+      struct sockaddr_in *sin = &addr;
+      inet_ntop(AF_INET, &sin->sin_addr, client->ip, sizeof(client->ip));
+      client->port = htons(sin->sin_port);
+      free(sin);
+
       callbackData_t cbData = {0};
       cbData.client = client;
       cbData.server = this;
