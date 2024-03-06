@@ -1,8 +1,8 @@
-#include <pnet/net.h>
+#include <pnet/pnet.h>
 
 #include <stdio.h>
 
-pprot_e sProtocol = PNET_UDP;
+pprot_e sProtocol = PNET_TCP;
 
 int main(void) {
   if (!pnet_init(sProtocol)) {

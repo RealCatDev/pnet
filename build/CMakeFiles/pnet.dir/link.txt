@@ -1,0 +1,2 @@
+C:\msys64\mingw64\bin\ar.exe qc libpnet.a CMakeFiles/pnet.dir/src/net.c.obj
+C:\msys64\mingw64\bin\ranlib.exe libpnet.a

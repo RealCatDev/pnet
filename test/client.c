@@ -1,10 +1,10 @@
-#include <pnet/net.h>
+#include <pnet/pnet.h>
 #include <stdio.h>
 
 #include <windows.h>
 
 int main(int argc, char **argv) {
-  if (!pnet_init(PNET_UDP)) {
+  if (!pnet_init(PNET_TCP)) {
     fprintf(stderr, "Failed to initialize!\n");
     return 1;
   }

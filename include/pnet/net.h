@@ -1,6 +1,10 @@
 #ifndef PNET_NET_H_
 #define PNET_NET_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -28,6 +32,7 @@ typedef enum {
     PNET_ADDRINUSE  = WSAEADDRINUSE,
     PNET_NOTSOCKET  = WSAENOTSOCK,
     PNET_DISCONNECT = WSAEDISCON,
+    PNET_CONNRESET  = WSAECONNRESET,
   #else
 
   #endif
@@ -43,7 +48,7 @@ typedef struct message {
 } pmsg_t;
 
 pmsg_t *pmsg_create(const char *msg);
-void    pmsg_free  (pmsg_t *this);
+void    pmsg_free  (pmsg_t *);
 
 typedef struct client {
   #ifdef _WIN32
@@ -59,10 +64,10 @@ typedef struct client {
 } pclient_t;
 
 pclient_t *pclient_create ();
-perror_e   pclient_connect(pclient_t *this, const char *ip, uint16_t port);
-perror_e   pclient_send   (pclient_t *this, pmsg_t *msg);
-perror_e   pclient_recieve(pclient_t *this, pmsg_t **msg);
-void       pclient_free   (pclient_t *this);
+perror_e   pclient_connect(pclient_t *, const char *ip, uint16_t port);
+perror_e   pclient_send   (pclient_t *, pmsg_t *msg);
+perror_e   pclient_recieve(pclient_t *, pmsg_t **msg);
+void       pclient_free   (pclient_t *);
 
 typedef struct server {
   #ifdef _WIN32
@@ -77,10 +82,14 @@ typedef struct server {
 } pserver_t;
 
 pserver_t *pserver_create           ();
-void       pserver_setClientFunction(pserver_t *this, void(*func)(pclient_t *clnt));
-perror_e   pserver_bind             (pserver_t *this, uint16_t port);
-perror_e   pserver_listen           (pserver_t *this);
-perror_e   pserver_recieve          (pserver_t *this, pmsg_t **msg, pclient_t **client);
-void       pserver_free             (pserver_t *this);
+void       pserver_setClientFunction(pserver_t *, void(*func)(pclient_t *clnt));
+perror_e   pserver_bind             (pserver_t *, uint16_t port);
+perror_e   pserver_listen           (pserver_t *);
+perror_e   pserver_recieve          (pserver_t *, pmsg_t **msg, pclient_t **client);
+void       pserver_free             (pserver_t *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

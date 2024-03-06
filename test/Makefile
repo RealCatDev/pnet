@@ -10,7 +10,7 @@ clean:
 	@rm -rf server.exe client.exe
 
 server: server.c
-	@$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) -I../src/include/
+	@$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) -I../include/
 
 client: client.c
-	@$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) -I../src/include/
+	@$(CC) -o $@ $^ $(CFLAGS) $(LDFLAGS) -I../include/

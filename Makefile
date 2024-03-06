@@ -5,7 +5,7 @@ CFLAGS  :=
 BIN_DIR := bin
 
 SRC_DIR := src
-INC_DIR := $(SRC_DIR)/include
+INC_DIR := include
 
 TARGET  := $(BIN_DIR)/libpnet.a
 SOURCES := $(wildcard $(SRC_DIR)/**.c)
